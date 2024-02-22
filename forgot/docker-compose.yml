@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  dbservice:
+    image: mongo
+    ports:
+      - 27017:27017
+    volumes:
+      - ./data:/var/lib/mongo
+    networks:
+      - bootapp
+
+  appservice:
+    build: ./boot
+    depends_on:
+      - dbservice
+    environment:
+      - MONGODB_URI=mongodb://dbservice:27017/db
+    ports:
+      - 8088:8080
+    networks:
+      - bootapp
+
+networks:
+  bootapp:
+    driver: bridge
