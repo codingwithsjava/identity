@@ -1,0 +1,31 @@
+spring:
+ cloud:
+   gateway:
+     routes:
+       - id: WALLET-SERVICE
+         uri: lb://WALLET-SERVICE
+         predicates:
+           - Path=/wallet/**
+         filters:
+           - AuthenticationFilter
+
+
+       - id: TRANSACTION-SERVICE
+         uri: lb://TRANSACTION-SERVICE
+         predicates:
+           - Path=/transaction/**
+         filters:
+           - AuthenticationFilter
+
+       - id: identity-service
+         uri: lb://IDENTITY-SERVICE
+         predicates:
+           - Path=/auth/**
+
+ application:
+   name: SWIGGY-GATEWAY
+
+eureka:
+  client:
+    service-url:
+      defaultZone : http://localhost:8761/eureka/
